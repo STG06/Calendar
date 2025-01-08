@@ -1,4 +1,3 @@
-
 import streamlit as st
 from streamlit_calendar import calendar
 
@@ -10,8 +9,8 @@ if "events" not in st.session_state:
 with st.form("Add Event"):
     st.write("Add an event")
     title = st.text_input("Title")
-    date = st.text_input("Date")
-    time = st.text_input("Time")
+    date = st.text_input("Date (YYYY-MM-DD)")
+    time = st.text_input("Time (HH-MM) Optional")
     add = st.form_submit_button("Add Event")
 
     if add:
@@ -38,15 +37,15 @@ calendar_options = {
     "initialView": "dayGridMonth",
 }
 
-# Display the calendar with events
+
 calendar_instance = calendar(
-    events=st.session_state.events,  # Use the events from session state
+    events=st.session_state.events,  
     options=calendar_options,
 )
 
-# Display the calendar in the Streamlit app
+
 st.write(calendar_instance)
 
-# Display all events in session state
+
 st.subheader("All Events")
 st.json(st.session_state.events)
