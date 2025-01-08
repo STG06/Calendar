@@ -1,0 +1,2 @@
+streamlit>=1.0
+streamlit-calendar>=0.1.0
