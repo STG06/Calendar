@@ -1,6 +1,6 @@
 
 import streamlit as st
-from streamlit_calendar import Calendar
+from streamlit_calendar import calendar
 
 st.title("Suleyman's Calendar")
 
@@ -15,24 +15,38 @@ with st.form("Add Event"):
     add = st.form_submit_button("Add Event")
 
     if add:
-        new_event = {
-            "title": title,
-            "start": date.isoformat() + (f"T{time.isoformat()}" if time else ""),
-        }
-        st.session_state.events.append(new_event)
-        st.success(f"Event '{title}' added successfully!")
+        if title and date:
+            new_event = {
+                "title": title,
+                "start": date.isoformat() + (f"T{time.isoformat()}" if time else ""),
+            }
+            st.session_state.events.append(new_event)
+            st.success(f"Event '{title}' added successfully!")
+        else:
+            st.error("Please input a title and date")
 
-calendar1 = Calendar(
-    initial_view="dayGridMonth",
-    events=st.session_state.events,
-    default_date="2025-01-01",  # Start the calendar on January 2025
+calendar_options = {
+    "editable": True,
+    "selectable": True,
+    "headerToolbar": {
+        "left": "today prev,next",
+        "center": "title",
+        "right": "dayGridMonth,dayGridWeek,dayGridDay",
+    },
+    "slotMinTime": "06:00:00",
+    "slotMaxTime": "18:00:00",
+    "initialView": "dayGridMonth",
+}
+
+# Display the calendar with events
+calendar_instance = calendar(
+    events=st.session_state.events,  # Use the events from session state
+    options=calendar_options,
 )
 
-selectedEvent = calendar1.show()
+# Display the calendar in the Streamlit app
+st.write(calendar_instance)
 
-if selectedEvent:
-    st.write("Event Details")
-    st.json(selectedEvent)
-
+# Display all events in session state
 st.subheader("All Events")
 st.json(st.session_state.events)
